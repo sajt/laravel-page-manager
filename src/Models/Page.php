@@ -1,4 +1,4 @@
-<?php namespace App\Models;
+<?php namespace webmuscets\PageManager\Models;
 
 use Illuminate\Database\Eloquent\Model,
     Cviebrock\EloquentSluggable\Sluggable,
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model,
 
 class Page extends Model {
     protected $guarded = array('id','created_at','updated_at');
-    protected $table = "pages";
+    protected $table = "page_manager_pages";
 
     use Sluggable;
 

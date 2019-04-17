@@ -21,11 +21,8 @@ class CreatePageManagerPagesTable extends Migration
             $table->boolean('is_article')->default(1);
             $table->boolean('is_system')->default(0);
             
-            $table->unsignedInteger('language_id');
-            $table->foreign('language_id')->references('id')->on('languages')->onUpdate('cascade')->onDelete('restrict');
-
-            $table->integer('picture_id')->unsigned()->nullable();
-            $table->foreign('picture_id')->references('id')->on('pictures')->onUpdate('cascade')->onDelete('restrict');
+            $table->integer('language_id')->nullable();
+            $table->integer('picture_id')->nullable();
 
             $table->string('internal_url')->nullable();
             $table->string('slug');
