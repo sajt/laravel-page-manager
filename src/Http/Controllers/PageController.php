@@ -5,7 +5,8 @@ use App\Http\Controllers\Controller, Redirect;
 use Illuminate\Http\Request;
 use webmuscets\PageManager\Models\Page,
 	webmuscets\PageManager\Http\Requests\PageRequest,
-	webmuscets\PageManager\Models\PageSection;
+	webmuscets\PageManager\Models\PageSection,
+	webmuscets\PageManager\Models\PageSectionField;
 
 class PageController extends Controller {
 	public function index()
@@ -52,6 +53,15 @@ class PageController extends Controller {
 				'is_list' => $section->is_list,
 			];
 			$newSection->fill($sectionInput)->save();
+
+			foreach ($section->fields as $key => $field) {
+				$newField = new PageSectionField;
+				$newField->fill([
+					'name' => $field->name,
+					'type' => $field->type,
+					'page_section_id' => $newSection->id,
+				])->save(); 
+			}
 		}
 
 		return Redirect::to('/page-manager');
