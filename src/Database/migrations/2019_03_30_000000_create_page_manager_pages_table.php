@@ -21,7 +21,7 @@ class CreatePageManagerPagesTable extends Migration
             $table->string('internal_url')->nullable();
             $table->string('slug');
 
-            $table->integer('layout_id')->unsigned()->nullable();
+            $table->integer('layout_id')->unsigned();
             $table->foreign('layout_id')->references('id')->on('page_manager_layouts')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();

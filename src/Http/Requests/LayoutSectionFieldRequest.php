@@ -4,7 +4,7 @@ namespace webmuscets\PageManager\Http\Requests;
 
 use webmuscets\PageManager\Http\Requests\Request;
 
-class PageFieldRequest extends Request {
+class LayoutSectionFieldRequest extends Request {
 
     public function authorize()
     {

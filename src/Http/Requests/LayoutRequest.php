@@ -4,7 +4,7 @@ namespace webmuscets\PageManager\Http\Requests;
 
 use webmuscets\PageManager\Http\Requests\Request;
 
-class PageRequest extends Request {
+class LayoutRequest extends Request {
 
     public function authorize()
     {
@@ -14,8 +14,7 @@ class PageRequest extends Request {
     public function rules()
     {
         return [
-            'crud.page.slug' => 'required',
-        	'crud.page.layout_id' => 'required',
+        	'crud.layout.name' => 'required',
         ];
     }
 }

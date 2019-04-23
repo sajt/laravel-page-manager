@@ -5,9 +5,9 @@ use Illuminate\Database\Eloquent\Model,
     webmuscets\FormManager\Creator\Form as FormManager,
     webmuscets\TableManager\Table;
 
-class PageField extends Model {
+class LayoutSectionField extends Model {
     protected $guarded = array('id','created_at','updated_at');
-    protected $table = "page_manager_page_section_fields";
+    protected $table = "page_manager_layout_section_fields";
 
     public static function getFieldTypes() {
         return [
@@ -21,7 +21,7 @@ class PageField extends Model {
     }
 
     public static function getForm($sectionID) {
-        $baseUrl = '/page-manager/page-sections/'.$sectionID.'/fields';
+        $baseUrl = '/page-manager/layout-sections/'.$sectionID.'/fields';
         $form = new Form;
         $form->fields = [
             'fields' => [
@@ -33,7 +33,7 @@ class PageField extends Model {
                     ],
                     [
                         'type' => 'hidden',
-                        'property' => 'page_section_id',
+                        'property' => 'layout_section_id',
                     ],
                     [
                         'type' => 'text',
@@ -49,7 +49,7 @@ class PageField extends Model {
             ],
         ];
     
-        $items = self::where('page_section_id','=',$sectionID)->get();
+        $items = self::where('layout_section_id','=',$sectionID)->get();
 
         $form->fields['fields']['rows'] = $items;
 

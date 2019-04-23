@@ -36,19 +36,12 @@ class PageController extends Controller {
 	public function store(PageRequest $request) {
 		$page = new Page;
 		$pageInputs = $request['crud']['page'];
-		$pageInputs['is_article'] = 0;
 		
 		if(!isset($pageInputs['is_system']) || !$pageInputs['is_system'])
 			$pageInputs['is_system'] = 0;
 		
 
 		$page->fill($pageInputs)->save();
-
-		foreach ($request['crud']['page_sections'] as $key => $sectionInput) {
-			$section = new PageSection;
-			$section->page_id = $page->id;
-			$section->fill($sectionInput)->save();
-		}
 		
 		return Redirect::to('/page-manager');
 	}
@@ -69,18 +62,6 @@ class PageController extends Controller {
 			$pageInputs['is_system'] = 0;
 
 		$page->fill($pageInputs)->update();
-
-		foreach ($request['crud']['page_sections'] as $key => $sectionInput) {
-			$sectionInput['page_id'] = $page->id;
-			PageSection::updateOrCreate(['id' => $sectionInput['id']], $sectionInput);
-		}
-
-        $deletableItems = isset($request['deletableItems']) && is_array($request['deletableItems']) ? $request['deletableItems'] : [];
-
-        foreach ($deletableItems as $itemID) {
-            $section = PageSection::findOrFail($itemID);
-            $section->delete();
-        }
 
 		return Redirect::to('/page-manager');
 	}

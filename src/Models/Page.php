@@ -16,9 +16,9 @@ class Page extends Model {
     public static function getTableView() {
         $table = new Table;
         $table->hasAction = true;
-        $table->fields = ['title' => 'Title'];
+        $table->fields = ['slug' => 'URL'];
         
-        $table->items = self::where('is_article','=',0)->get();
+        $table->items = self::all();
         
         foreach ($table->items as $key => $item) {
             $item->actions = view('page-manager::pages.actions',compact('item'))->render();
@@ -35,12 +35,9 @@ class Page extends Model {
                 'type' => 'checkbox',
                 'label' => 'Is system?',
             ],
-            'page.title' => [ 
-                'type' => 'text', 
-                'label' => 'Title', 
-                'attributes' => [ 
-                    'required' => 'required',
-                ]
+            'page.layout_id' => [
+                'type' => 'select',
+                'label' => 'Layout',
             ],
             'page.slug' => [ 
                 'type' => 'text', 
@@ -49,34 +46,18 @@ class Page extends Model {
                     'required' => 'required',
                 ]
             ], 
-            'page_sections' => [
-                'type' => 'multiline',
-                'fields' => [
-                    [
-                        'type' => 'text',
-                        'property' => 'block',
-                        'label' => 'Inner block name',
-                    ],
-                    [
-                        'type' => 'text',
-                        'property' => 'caption',
-                        'label' => 'Dashboard caption',
-                    ],
-                    [
-                        'type' => 'select',
-                        'property' => 'is_list',
-                        'label' => 'Is list?',
-                        'listItems' => [
-                            0 => 'No',
-                            1 => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
+            'page.internal_url' => [ 
+                'type' => 'text', 
+                'label' => 'Internal URI (Group)',
+            ], 
         ];
 
         $form->values = [
             'page.is_system' => 1,
+        ];
+
+        $form->lists = [
+            'page.layout_id' => Layout::pluck('name','id')->all(),
         ];
     
         if($id) {
@@ -84,9 +65,6 @@ class Page extends Model {
             foreach ($item->toArray() as $name => $value) {
                 $form->values['page.'.$name] = $value;
             }
-
-            $form->fields['page_sections']['fields'][] = [ 'type' => 'hidden', 'property' => 'id'];
-            $form->fields['page_sections']['rows'] = $item->sections;
         }
 
         $form->config = [

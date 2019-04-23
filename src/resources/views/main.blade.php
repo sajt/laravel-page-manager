@@ -15,14 +15,14 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-            <li class="nav-item {{{ \Request::segment(1) == 'page-manager' ? 'active' : '' }}}">
+            <li class="nav-item {{{ \Request::segment(1) == 'page-manager' && !\Request::segment(2) ? 'active' : '' }}}">
               <a class="nav-link" href="/page-manager">
                 <p>Pages</p>
               </a>
             </li>
 
             <li class="nav-item {{{ \Request::segment(1) == 'page-manager' && \Request::segment(2) == 'layouts' ? 'active' : '' }}}">
-              <a class="nav-link" href="/page-manager">
+              <a class="nav-link" href="/page-manager/layouts">
                 <p>Layouts</p>
               </a>
             </li>

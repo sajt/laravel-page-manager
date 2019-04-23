@@ -17,20 +17,4 @@ class PageSection extends Model {
       return $this->hasMany(__NAMESPACE__.'\PageSectionItem');
     }
 
-    public static function getTableView($pageID) {
-        $table = new Table;
-        $table->hasAction = true;
-        $table->fields = [
-            'caption' => 'Section',
-        ];
-
-        $table->items = self::where('page_id','=',$pageID)->get();
-
-        foreach ($table->items as $key => $item) {
-            $item->actions = view('page-manager::page-sections.actions',compact('item'))->render();
-        }
-        return $table->render();
-    }
-
 }
-

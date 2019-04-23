@@ -2,10 +2,6 @@
     <i class='fa fa-pencil'></i>
 </a>
 
-<a class="btn btn-warning btn-sm" href="/page-manager/pages/{{{ $item->id }}}/sections">
-  <i class='fa fa-list'></i>
-</a>
-
 <form method="POST" action="/page-manager/pages/{{{ $item->id }}}" style="display:inline">
     <input name="_method" type="hidden" value="DELETE">
     @csrf
