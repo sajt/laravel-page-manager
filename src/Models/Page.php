@@ -1,84 +1,92 @@
 <?php namespace webmuscets\PageManager\Models;
 
 use Illuminate\Database\Eloquent\Model,
-    Cviebrock\EloquentSluggable\Sluggable,
-    App\Libraries\FormManager\Render\Form,
-    App\Libraries\FormManager\Creator\Form as FormManager,
-    App\Libraries\DataTable\Table;
+    webmuscets\FormManager\Render\Form,
+    webmuscets\FormManager\Creator\Form as FormManager,
+    webmuscets\TableManager\Table;
 
 class Page extends Model {
     protected $guarded = array('id','created_at','updated_at');
     protected $table = "page_manager_pages";
 
-    use Sluggable;
-
-    public function sluggable() {
-        return ['slug' => ['source' => 'title']];
+    public function sections() {
+    	return $this->hasMany(__NAMESPACE__.'\PageSection');
     }
 
-    public function picture() {
-    	return $this->belongsTo('\App\Models\Picture');
-    }
-
-    public function pageSections() {
-    	return $this->hasMany('\App\Models\PageSection');
-    }
-
-    public function getContent() {
-      $sections = [];
-      foreach ($this->pageSections as $key => $section) {
-	      $content = [];
-	      if ($section->content)
-	          $content =  unserialize($section->content);
-
-	      if (isset($content['item']) && !isset($content['items']))
-	      	$content = $content['item'];
- 
-	      if (isset($content['items']) && !isset($content['item']))
-	      	$content = $content['items'];
-	      
-	      $sections[$section->name] = $content;
-      }
-
-      return $sections;
-    }
-
-    public static function getTableView($languageID = false) {
+    public static function getTableView() {
         $table = new Table;
         $table->hasAction = true;
-        $table->fields = [
-            'title' => 'Cím',
-            'link' => 'Link',
-        ];
+        $table->fields = ['title' => 'Title'];
         
-        if(!$languageID)
-            $table->items = self::where('language_id','=',Language::siteLanguageID());
-        else 
-            $table->items = self::where('language_id','=',$languageID);
-
-        $table->items = $table->items->get();
+        $table->items = self::all();
         
         foreach ($table->items as $key => $item) {
-            $item->actions = view('admin.modules.pages.actions',compact('item'))->render();
-            $item->link = view('admin.modules.pages.link',compact('item'))->render();
+            $item->actions = view('page-manager::pages.actions',compact('item'))->render();
         }
         return $table->render();
     }
 
 
     public static function getForm($id = false) {
-        $baseUrl = '/dashboard/pages/';
+        $baseUrl = '/page-manager/pages/';
         $form = new Form;
-        $form->fields = FormManager::getFields('pages');
-        $form->lists = [
-            'language_id' => Language::getLanguageNames(),
+        $form->fields = [
+            'page.is_system' => [
+                'type' => 'checkbox',
+                'label' => 'Is system?',
+            ],
+            'page.title' => [ 
+                'type' => 'text', 
+                'label' => 'Title', 
+                'attributes' => [ 
+                    'required' => 'required',
+                ]
+            ],
+            'page.slug' => [ 
+                'type' => 'text', 
+                'label' => 'Slug', 
+                'attributes' => [ 
+                    'required' => 'required',
+                ]
+            ], 
+            'page_sections' => [
+                'type' => 'multiline',
+                'fields' => [
+                    [
+                        'type' => 'text',
+                        'property' => 'block',
+                        'label' => 'Inner block name',
+                    ],
+                    [
+                        'type' => 'text',
+                        'property' => 'caption',
+                        'label' => 'Dashboard caption',
+                    ],
+                    [
+                        'type' => 'select',
+                        'property' => 'is_list',
+                        'label' => 'Is list?',
+                        'listItems' => [
+                            0 => 'No',
+                            1 => 'Yes',
+                        ],
+                    ],
+                ],
+            ],
         ];
-        
+
+        $form->values = [
+            'page.is_system' => 1,
+        ];
+    
         if($id) {
-            $item = self::find($id)->toArray();
-            foreach ($item as $name => $value) {
-                $form->values[$name] = $value;
+            $item = self::find($id);
+            foreach ($item->toArray() as $name => $value) {
+                $form->values['page.'.$name] = $value;
             }
+
+            $form->fields['page_sections']['fields'][] = [ 'type' => 'hidden', 'property' => 'id'];
+            $form->fields['page_sections']['rows'] = $item->sections;
         }
 
         $form->config = [
@@ -89,8 +97,5 @@ class Page extends Model {
 
         return $form->render();
     }
-
-
-
 
 }

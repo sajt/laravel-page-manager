@@ -101,6 +101,5 @@
   </div>
 
   <script src="/page-manager/assets/js/app.js" type="text/javascript"></script>
-
 </body>
 </html>

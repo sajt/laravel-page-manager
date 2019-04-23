@@ -4,7 +4,7 @@ namespace webmuscets\PageManager\Http\Requests;
 
 use webmuscets\PageManager\Http\Requests\Request;
 
-class PageRequest extends Request {
+class PageFieldRequest extends Request {
 
     public function authorize()
     {
@@ -14,7 +14,8 @@ class PageRequest extends Request {
     public function rules()
     {
         return [
-        	'crud.page.title' => 'required',
+        	'crud.fields.*.name' => 'required',
+        	'crud.fields.*.type' => 'required',
         ];
     }
 }

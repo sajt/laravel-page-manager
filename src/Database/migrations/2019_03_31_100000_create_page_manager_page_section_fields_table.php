@@ -20,9 +20,8 @@ class CreatePageManagerPageSectionFieldsTable extends Migration
             $table->integer('page_section_id')->unsigned();
             $table->foreign('page_section_id')->references('id')->on('page_manager_page_sections')->onUpdate('cascade')->onDelete('cascade');
             
-            $table->integer('field_type_id')->unsigned();
-            $table->foreign('field_type_id')->references('id')->on('page_manager_field_types')->onUpdate('cascade')->onDelete('cascade');
-
+            $table->string('type')->default('text');
+            $table->string('name');
             $table->timestamps();
         });
     }

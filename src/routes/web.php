@@ -3,6 +3,13 @@
 
  Route::group(['namespace' => 'webmuscets\PageManager\Http\Controllers','prefix' => 'page-manager', 'middleware' => ['web']], function(){
     Route::get('/', 'PageController@index');
+
+    Route::resource('/pages','PageController');
+    
+    Route::get('/pages/{id}/sections','PageFieldController@sections');
+    Route::get('/pages/{pageID}/sections/{sectionID}/fields','PageFieldController@listFields');
+    Route::put('/page-sections/{sectionID}/fields','PageFieldController@updateFields');
+
     Route::get('/assets/{folder}/{file}', 'AssetController@getAsset');
 
 });
