@@ -40,9 +40,20 @@ class PageController extends Controller {
 		if(!isset($pageInputs['is_system']) || !$pageInputs['is_system'])
 			$pageInputs['is_system'] = 0;
 		
-
 		$page->fill($pageInputs)->save();
 		
+		foreach ($page->layout->sections as $key => $section) {
+			$newSection = new PageSection;
+			$sectionInput = [
+				'page_id' => $page->id,
+				'layout_section_id' => $section->id,
+				'block' => $section->block,
+				'caption' => $section->caption,
+				'is_list' => $section->is_list,
+			];
+			$newSection->fill($sectionInput)->save();
+		}
+
 		return Redirect::to('/page-manager');
 	}
 

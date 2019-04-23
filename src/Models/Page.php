@@ -1,6 +1,6 @@
 <?php namespace webmuscets\PageManager\Models;
 
-use Illuminate\Database\Eloquent\Model,
+use Illuminate\Database\Eloquent\Model, DB,
     webmuscets\FormManager\Render\Form,
     webmuscets\FormManager\Creator\Form as FormManager,
     webmuscets\TableManager\Table;
@@ -11,6 +11,10 @@ class Page extends Model {
 
     public function sections() {
     	return $this->hasMany(__NAMESPACE__.'\PageSection');
+    }
+
+    public function layout() {
+        return $this->belongsTo(__NAMESPACE__.'\Layout');
     }
 
     public static function getTableView() {
@@ -35,36 +39,44 @@ class Page extends Model {
                 'type' => 'checkbox',
                 'label' => 'Is system?',
             ],
-            'page.layout_id' => [
-                'type' => 'select',
-                'label' => 'Layout',
-            ],
             'page.slug' => [ 
                 'type' => 'text', 
                 'label' => 'Slug', 
                 'attributes' => [ 
                     'required' => 'required',
                 ]
-            ], 
-            'page.internal_url' => [ 
+            ],
+        ];
+
+        if(config('page-manager.languages')) {
+            $form->fields['page.internal_url'] = [ 
                 'type' => 'text', 
                 'label' => 'Internal URI (Group)',
-            ], 
-        ];
+            ];
 
-        $form->values = [
-            'page.is_system' => 1,
-        ];
+            $form->fields['page.language_id'] = [
+                'type' => 'select',
+                'label' => 'Language',
+            ];
 
-        $form->lists = [
-            'page.layout_id' => Layout::pluck('name','id')->all(),
-        ];
-    
+            $form->lists['page.language_id'] = DB::table(config('page-manager.languages_table'))->pluck(config('page-manager.languages_name_field'),'id')->all();
+        }
+
+
+        $form->values = ['page.is_system' => 1];
+
         if($id) {
             $item = self::find($id);
             foreach ($item->toArray() as $name => $value) {
                 $form->values['page.'.$name] = $value;
             }
+        } else {
+            $form->fields['page.layout_id'] = [
+                'type' => 'select',
+                'label' => 'Layout',
+            ];
+
+            $form->lists['page.layout_id'] = Layout::pluck('name','id')->all();
         }
 
         $form->config = [
