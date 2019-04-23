@@ -36,9 +36,11 @@ class PageController extends Controller {
 	public function store(PageRequest $request) {
 		$page = new Page;
 		$pageInputs = $request['crud']['page'];
+		$pageInputs['is_article'] = 0;
 		
 		if(!isset($pageInputs['is_system']) || !$pageInputs['is_system'])
 			$pageInputs['is_system'] = 0;
+		
 
 		$page->fill($pageInputs)->save();
 

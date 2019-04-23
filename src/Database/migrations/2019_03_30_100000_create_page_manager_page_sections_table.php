@@ -20,12 +20,15 @@ class CreatePageManagerPageSectionsTable extends Migration
             $table->integer('page_id')->unsigned();
             $table->foreign('page_id')->references('id')->on('page_manager_pages')->onUpdate('cascade')->onDelete('cascade');
 
+            $table->integer('layout_section_id')->unsigned();
+            $table->foreign('layout_section_id')->references('id')->on('page_manager_layout_sections')->onUpdate('cascade')->onDelete('cascade');
+
             $table->string('block');
             $table->string('caption');
+            $table->boolean('is_list')->default(0);
 
             $table->mediumText('content')->nullable();
             $table->integer('order')->default(1);
-            $table->boolean('is_list')->default(0);
             $table->timestamps();
         });
     }

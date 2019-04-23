@@ -18,7 +18,7 @@ class Page extends Model {
         $table->hasAction = true;
         $table->fields = ['title' => 'Title'];
         
-        $table->items = self::all();
+        $table->items = self::where('is_article','=',0)->get();
         
         foreach ($table->items as $key => $item) {
             $item->actions = view('page-manager::pages.actions',compact('item'))->render();

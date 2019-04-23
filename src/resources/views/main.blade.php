@@ -20,6 +20,12 @@
                 <p>Pages</p>
               </a>
             </li>
+
+            <li class="nav-item {{{ \Request::segment(1) == 'page-manager' && \Request::segment(2) == 'layouts' ? 'active' : '' }}}">
+              <a class="nav-link" href="/page-manager">
+                <p>Layouts</p>
+              </a>
+            </li>
         </ul>
       </div>
     </div>

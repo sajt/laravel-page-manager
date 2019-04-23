@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePageManagerPagesTable extends Migration
+class CreatePageManagerLayoutSectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreatePageManagerPagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('page_manager_pages', function (Blueprint $table) {
-            $table->increments('id');
-            $table->boolean('is_system')->default(0);
-            
-            $table->integer('language_id')->nullable();
-            $table->string('internal_url')->nullable();
-            $table->string('slug');
 
-            $table->integer('layout_id')->unsigned()->nullable();
+        Schema::create('page_manager_layout_sections', function (Blueprint $table) {
+            $table->increments('id');
+            
+            $table->integer('layout_id')->unsigned();
             $table->foreign('layout_id')->references('id')->on('page_manager_layouts')->onUpdate('cascade')->onDelete('cascade');
 
+            $table->string('block');
+            $table->string('caption');
+
+            $table->boolean('is_list')->default(0);
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ class CreatePageManagerPagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('page_manager_pages');
+        Schema::dropIfExists('page_manager_layout_sections');
     }
 }

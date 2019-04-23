@@ -10,11 +10,11 @@ class PageSection extends Model {
     protected $table = "page_manager_page_sections";
 
     public function page() {
-      return $this->belongsTo('App\Models\Page');
+      return $this->belongsTo(__NAMESPACE__.'\Page');
     }
 
     public function items() {
-      return $this->hasMany('App\Models\PageSectionItem');
+      return $this->hasMany(__NAMESPACE__.'\PageSectionItem');
     }
 
     public static function getTableView($pageID) {
