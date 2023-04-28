@@ -9,7 +9,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "cviebrock/eloquent-sluggable": "^4.5",
+        "cviebrock/eloquent-sluggable": "dev-master",
         "webmuscets/laravel-table-manager": "dev-master"
     },
     "autoload": {
