@@ -1,10 +1,10 @@
 {
-    "name": "webmuscets/page-manager",
+    "name": "sajt/page-manager",
     "type": "library",
     "authors": [
         {
-            "name": "Gergo Mando",
-            "email": "gergo.mando@gmail.com"
+            "name": "Tamas Amon",
+            "email": "tamas.amon@gmail.com"
         }
     ],
     "minimum-stability": "dev",
